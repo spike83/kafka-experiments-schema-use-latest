@@ -1,0 +1,22 @@
+{
+  "namespace": "io.spoud.example",
+  "type": "record",
+  "name": "Offer",
+  "fields" : [
+    {
+      "name" : "id",
+      "type" : "string"
+    },{
+      "name" : "content",
+      "type" : "string"
+    },
+    {
+      "name": "forceUpdate",
+      "type": [
+        "null",
+        "boolean"
+      ],
+      "default": null
+    }
+  ]
+}
