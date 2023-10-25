@@ -1,5 +1,15 @@
 Reproducer for schema compatibility problem when using generated java classes and `use.latest.version=true`.
 
+There is a `docker-compose.yaml` included into the repos. It will start:
+- a kafka cluster (including zookeeper)
+- a schema registry
+
+in order to run
+
+```bash
+docker-compose up -d
+```
+
 The topic will have records of 2 schemas which are fully compatible but the consumer using specific record and the latest version will fail.
 
 There is four consumers looking at the same topic `offer`:
@@ -60,4 +70,17 @@ Caused by: java.lang.IndexOutOfBoundsException: Invalid index: 2
 	at io.confluent.kafka.serializers.AbstractKafkaAvroDeserializer$DeserializationContext.read(AbstractKafkaAvroDeserializer.java:505)
 	... 11 more
 
+```
+
+
+Setting the setting the compatibility mode:
+
+```bash
+docker-compose up -d
+# wait for the registry to start
+
+curl -X PUT 0.0.0.0:8081/config -d '{"compatibility":"full_transitive"}' -H "Content-Type: application/vnd.schemaregistry.v1+json"
+
+# check compatibility by
+curl 0.0.0.0:8081/config
 ```
